@@ -4,32 +4,131 @@
 
 Trend Finder collects and analyzes posts from key influencers, then sends a Slack notification when it detects new trends or product launches. This has been a complete game-changer for the @firecrawl_dev marketing team by:
 
-- **Saving time** normally spent manually searching social channels  
-- **Keeping you informed** of relevant, real-time conversations  
-- **Enabling rapid response** to new opportunities or emerging industry shifts  
+- **Saving time** normally spent manually searching social channels
+- **Keeping you informed** of relevant, real-time conversations
+- **Enabling rapid response** to new opportunities or emerging industry shifts
 
 _Spend less time hunting for trends and more time creating impactful campaigns._
 
----
+## How it Works
+
+1. **Data Collection** 📥
+   - Monitors selected influencers' posts on Twitter/X using their API
+   - Uses Firecrawl to gather additional web data and context
+   - Runs on a scheduled basis using cron jobs
+
+2. **AI Analysis** 🧠
+   - Processes collected content through Together AI
+   - Identifies emerging trends and patterns
+   - Detects product launches and significant conversations
+   - Analyzes sentiment and relevance
+
+3. **Notification System** 📢
+   - When significant trends are detected, sends instant Slack notifications
+   - Provides context about the trend and its sources
+   - Enables quick response to emerging opportunities
+
+4. **Practical Example** 💡
+   - Multiple tech influencers start discussing a new AI tool
+   - Trend Finder detects this pattern in real-time
+   - Your marketing team gets notified via Slack
+   - You can quickly create content or engage with the trend early
+
+## Features
+
+- 🤖 AI-powered trend analysis using Together AI
+- 📱 Social media monitoring (Twitter/X integration)
+- 🔍 Firecrawl integration for enhanced data crawling
+- 📊 Real-time trend detection and analysis
+- 💬 Instant Slack notifications
+- ⏱️ Scheduled monitoring using cron jobs
+- 🎯 Express.js backend for reliable performance
+
+## Tech Stack
+
+- **Runtime**: Node.js with TypeScript
+- **Framework**: Express.js
+- **AI/ML**: Together AI
+- **Data Sources**:
+  - Twitter/X API
+  - Firecrawl
+- **Notifications**: Slack Webhooks
+- **Scheduling**: node-cron
+- **Development**:
+  - nodemon for hot reloading
+  - TypeScript for type safety
+  - Express async handler for error management
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- Slack workspace with webhook permissions
+- API keys for required services
 
 ## Environment Variables
 
-Set the following environment variables in your `.env` file (or your preferred configuration method):
+Copy `.env.example` to `.env` and configure the following variables:
 
 ```
-TOGETHER_API_KEY=
-FIRECRAWL_API_KEY=
-X_API_BEARER_TOKEN=
-SLACK_WEBHOOK_URL=
+# Required: API key from Together AI for trend analysis (https://www.together.ai/)
+TOGETHER_API_KEY=your_together_api_key_here
+
+# Optional: API key for Firecrawl services - needed only if using Firecrawl features
+FIRECRAWL_API_KEY=your_firecrawl_api_key_here
+
+# Optional: Twitter/X API Bearer token - needed only if monitoring Twitter/X trends
+X_API_BEARER_TOKEN=your_twitter_api_bearer_token_here
+
+# Required: Incoming Webhook URL from Slack for notifications
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 ```
 
 ## Getting Started
 
-1. **Install dependencies:**  
+1. **Clone the repository:**
+   ```bash
+   git clone [repository-url]
+   cd trend-finder
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-2. **Run the application:**  
+
+3. **Configure environment variables:**
    ```bash
-   npm run start
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
+
+4. **Run the application:**
+   ```bash
+   # Development mode with hot reloading
+   npm run start
+
+   # Build for production
+   npm run build
+   ```
+
+## Project Structure
+
+```
+trend-finder/
+├── src/
+│   ├── controllers/    # Request handlers
+│   ├── services/       # Business logic
+│   └── index.ts        # Application entry point
+├── .env.example        # Environment variables template
+├── package.json        # Dependencies and scripts
+└── tsconfig.json       # TypeScript configuration
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
