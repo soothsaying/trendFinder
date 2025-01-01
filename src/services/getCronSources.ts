@@ -28,6 +28,7 @@ export async function getCronSources() {
       { identifier: "https://x.com/v0"},
       { identifier: "https://x.com/aisdk"},
       { identifier: "https://x.com/googleaidevs"},
+      { identifier: "https://x.com/nickscamara_"},
     ];
 
     return sources.map(source => source.identifier);
