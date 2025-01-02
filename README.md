@@ -74,10 +74,10 @@ Copy `.env.example` to `.env` and configure the following variables:
 # Required: API key from Together AI for trend analysis (https://www.together.ai/)
 TOGETHER_API_KEY=your_together_api_key_here
 
-# Optional: API key for Firecrawl services - needed only if monitoring web pages
+# Optional: API key for Firecrawl services - needed only if monitoring web pages (https://www.firecrawl.dev/)
 FIRECRAWL_API_KEY=your_firecrawl_api_key_here
 
-# Optional: Twitter/X API Bearer token - needed only if monitoring Twitter/X trends
+# Optional: Twitter/X API Bearer token - needed only if monitoring Twitter/X trends (https://developer.x.com/)
 X_API_BEARER_TOKEN=your_twitter_api_bearer_token_here
 
 # Required: Incoming Webhook URL from Slack for notifications
