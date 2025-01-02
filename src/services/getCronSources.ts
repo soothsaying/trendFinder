@@ -30,6 +30,7 @@ export async function getCronSources() {
       { identifier: "https://x.com/googleaidevs"},
       { identifier: "https://x.com/nickscamara_"},
       { identifier: "https://x.com/ericciarla"},
+      { identifier: "https://x.com/CalebPeffer"},
       { identifier: "https://www.firecrawl.dev/blog"},
       
     ];
