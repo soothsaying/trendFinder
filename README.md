@@ -74,7 +74,7 @@ Copy `.env.example` to `.env` and configure the following variables:
 # Required: API key from Together AI for trend analysis (https://www.together.ai/)
 TOGETHER_API_KEY=your_together_api_key_here
 
-# Optional: API key for Firecrawl services - needed only if using Firecrawl features
+# Optional: API key for Firecrawl services - needed only if monitoring web pages
 FIRECRAWL_API_KEY=your_firecrawl_api_key_here
 
 # Optional: Twitter/X API Bearer token - needed only if monitoring Twitter/X trends
