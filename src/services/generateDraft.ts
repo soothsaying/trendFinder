@@ -17,11 +17,11 @@ export async function generateDraft(rawStories: string) {
 
     // Define the schema for our response
     const DraftPostSchema = z.object({
-      interestingTweets: z.array(z.object({
-        tweet_link: z.string().describe("The direct link to the tweet"),
-        description: z.string().describe("A short sentence describing what's interesting about the tweet")
+      interestingTweetsOrStories: z.array(z.object({
+        story_or_tweet_link: z.string().describe("The direct link to the tweet or story"),
+        description: z.string().describe("A short sentence describing what's interesting about the tweet or story")
       }))
-    }).describe("Draft post schema with interesting tweets for AI developers.");
+    }).describe("Draft post schema with interesting tweets or stories for AI developers.");
 
     // Convert our Zod schema to JSON Schema
     const jsonSchema = zodToJsonSchema(DraftPostSchema, {
@@ -48,10 +48,10 @@ Only respond in valid JSON that matches the provided schema (no extra keys).
         },
         {
           role: 'user',
-          content: `Your task is to find interesting trends, launches, or interesting examples from the tweets. 
-For each tweet, provide a 'tweet_link' and a one-sentence 'description'. 
-Return all relevant tweets as separate objects. 
-Aim to pick at least 10 tweets unless there are fewer than 10 available. If there are less than 10 tweets, return ALL of them. Here are the raw tweets you can pick from:\n\n${rawStories}\n\n`
+          content: `Your task is to find interesting trends, launches, or interesting examples from the tweets or stories. 
+For each tweet or story, provide a 'story_or_tweet_link' and a one-sentence 'description'. 
+Return all relevant tweets or stories as separate objects. 
+Aim to pick at least 10 tweets or stories unless there are fewer than 10 available. If there are less than 10 tweets or stories, return ALL of them. Here are the raw tweets or stories you can pick from:\n\n${rawStories}\n\n`
         },
       ],
       // Tell Together to strictly enforce JSON output that matches our schema
@@ -72,8 +72,8 @@ Aim to pick at least 10 tweets unless there are fewer than 10 available. If ther
 
     // Construct the final post
     const header = `🚀 AI and LLM Trends on X for ${currentDate}\n\n`;
-    const draft_post = header + parsedResponse.interestingTweets
-      .map((tweet: any) => `• ${tweet.description}\n  ${tweet.tweet_link}`)
+    const draft_post = header + parsedResponse.interestingTweetsOrStories
+      .map((tweetOrStory: any) => `• ${tweetOrStory.description}\n  ${tweetOrStory.story_or_tweet_link}`)
       .join('\n\n');
 
     return draft_post;
