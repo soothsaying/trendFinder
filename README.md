@@ -2,7 +2,7 @@
 
 **Stay on top of trending topics on social media — all in one place.**
 
-Trend Finder collects and analyzes posts from key influencers, then sends a Slack notification when it detects new trends or product launches. This has been a complete game-changer for the @firecrawl_dev marketing team by:
+Trend Finder collects and analyzes posts from key influencers, then sends a Slack notification when it detects new trends or product launches. This has been a complete game-changer for the Firecrawl marketing team by:
 
 - **Saving time** normally spent manually searching social channels
 - **Keeping you informed** of relevant, real-time conversations
@@ -13,36 +13,27 @@ _Spend less time hunting for trends and more time creating impactful campaigns._
 ## How it Works
 
 1. **Data Collection** 📥
-   - Monitors selected influencers' posts on Twitter/X using their API
-   - Uses Firecrawl to gather additional web data and context
+   - Monitors selected influencers' posts on Twitter/X using the X API (Warning: the X API free plan is rate limited to only monitor 1 X account every 15 min)
+   - Monitors websites for new releases and news with Firecrawl
    - Runs on a scheduled basis using cron jobs
 
 2. **AI Analysis** 🧠
    - Processes collected content through Together AI
-   - Identifies emerging trends and patterns
-   - Detects product launches and significant conversations
+   - Identifies emerging trends, releases, and news.
    - Analyzes sentiment and relevance
 
 3. **Notification System** 📢
-   - When significant trends are detected, sends instant Slack notifications
+   - When significant trends are detected, sends Slack notifications based on cron job setup
    - Provides context about the trend and its sources
    - Enables quick response to emerging opportunities
-
-4. **Practical Example** 💡
-   - Multiple tech influencers start discussing a new AI tool
-   - Trend Finder detects this pattern in real-time
-   - Your marketing team gets notified via Slack
-   - You can quickly create content or engage with the trend early
 
 ## Features
 
 - 🤖 AI-powered trend analysis using Together AI
 - 📱 Social media monitoring (Twitter/X integration)
-- 🔍 Firecrawl integration for enhanced data crawling
-- 📊 Real-time trend detection and analysis
+- 🔍 Website monitoring with Firecrawl
 - 💬 Instant Slack notifications
 - ⏱️ Scheduled monitoring using cron jobs
-- 🎯 Express.js backend for reliable performance
 
 ## Tech Stack
 
