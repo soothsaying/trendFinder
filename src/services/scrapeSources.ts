@@ -1,14 +1,15 @@
 import FirecrawlApp from '@mendable/firecrawl-js';
 import dotenv from 'dotenv';
-import Together from 'together-ai';
+// Removed Together import
 import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+// Removed zodToJsonSchema import since we no longer enforce JSON output via Together
 
 dotenv.config();
 
+// Initialize Firecrawl
 const app = new FirecrawlApp({ apiKey: process.env.FIRECRAWL_API_KEY });
 
-// 1. Define the schema for your expected JSON
+// 1. Define the schema for our expected JSON
 const StorySchema = z.object({
   headline: z.string().describe("Story or post headline"),
   link: z.string().describe("A link to the post or story"),
@@ -19,12 +20,6 @@ const StoriesSchema = z.object({
   stories: z.array(StorySchema).describe(
     "A list of today's AI or LLM-related stories"
   ),
-});
-
-// 2. Convert Zod schema to JSON Schema for Together's response_format
-const jsonSchema = zodToJsonSchema(StoriesSchema, {
-  name: "StoriesSchema",
-  nameStrategy: "title",
 });
 
 export async function scrapeSources(sources: string[]) {
@@ -92,57 +87,55 @@ export async function scrapeSources(sources: string[]) {
         }
       }
     }
-    // --- 2) Handle all other sources (scraping) ---
+    // --- 2) Handle all other sources with Firecrawl extract ---
     else {
       if (useScrape) {
-        const scrapeResponse = await app.scrapeUrl(source, {
-          formats: ["markdown"],
-        });
-
-        if (!scrapeResponse.success) {
-          throw new Error(`Failed to scrape: ${scrapeResponse.error}`);
+        // Firecrawl will both scrape and extract for you
+        // Provide a prompt that instructs Firecrawl what to extract
+        const currentDate = new Date().toLocaleDateString();
+        const promptForFirecrawl = `
+        Return only today's AI or LLM related story or post headlines and links in JSON format from the page content. 
+        They must be posted today, ${currentDate}. The format should be:
+        {
+          "stories": [
+            {
+              "headline": "headline1",
+              "link": "link1",
+              "date_posted": "YYYY-MM-DD"
+            },
+            ...
+          ]
         }
+        If there are no AI or LLM stories from today, return {"stories": []}.
+        
+        The source link is ${source}. 
+        If a story link is not absolute, prepend ${source} to make it absolute. 
+        Return only pure JSON in the specified format (no extra text, no markdown, no \`\`\`). 
+        `;
 
-        // Use Together with Llama 3.1 to extract only today's AI/LLM content
-        try {
-          const together = new Together();
-          const currentDate = new Date().toLocaleDateString();
-
-          const LLMFilterResponse = await together.chat.completions.create({
-            model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
-            messages: [
-              {
-                role: "system",
-                content: `Today is ${currentDate}. Return only today's AI or LLM related story or post headlines and links in JSON format from the scraped content. They must be posted today. The format should be {"stories": [{"headline": "headline1", "link": "link1", "date_posted": "date1"}, ...]}.
-If there are no AI or LLM stories from today, return {"stories": []}. The source link is ${source}. 
-If the story or post link is not absolute, prepend ${source} to make it absolute. 
-Return only pure JSON in the specified format (no extra text, no markdown, no \`\`\`). 
-Scraped Content:\n\n${scrapeResponse.markdown}\n\nJSON:`,
-              },
-            ],
-            // 3. Enforce structured JSON output using our Zod-to-JSON-Schema
-            //@ts-ignore
-            response_format: { type: "json_object", schema: jsonSchema },
-          });
-
-          const rawJSON = LLMFilterResponse?.choices?.[0]?.message?.content;
-          if (!rawJSON) {
-            console.log(`No JSON output from LLM for ${source}`);
-            continue;
+        // Use app.extract(...) directly
+        const scrapeResult = await app.extract(
+          [source],
+          {
+            prompt: promptForFirecrawl,
+            schema: StoriesSchema, // The Zod schema for expected JSON
           }
+        );
 
-          // Parse the LLM's JSON response
-          const todayStories = JSON.parse(rawJSON);
-          console.log(`Found ${todayStories.stories.length} stories from ${source}`);
-          combinedText.stories.push(...todayStories.stories);
-        } catch (error) {
-          console.error("Error processing LLM response:", error);
+        if (!scrapeResult.success) {
+          throw new Error(`Failed to scrape: ${scrapeResult.error}`);
         }
+
+        // The structured data
+        const todayStories = scrapeResult.data;
+        console.log(`Found ${todayStories.stories.length} stories from ${source}`);
+        combinedText.stories.push(...todayStories.stories);
       }
     }
   }
 
   // Return the combined stories from all sources
   const rawStories = combinedText.stories;
+  console.log(rawStories);
   return rawStories;
 }
