@@ -14,7 +14,7 @@ _Spend less time hunting for trends and more time creating impactful campaigns._
 
 1. **Data Collection** 📥
    - Monitors selected influencers' posts on Twitter/X using the X API (Warning: the X API free plan is rate limited to only monitor 1 X account every 15 min)
-   - Monitors websites for new releases and news with Firecrawl
+   - Monitors websites for new releases and news with Firecrawl's /extract
    - Runs on a scheduled basis using cron jobs
 
 2. **AI Analysis** 🧠
