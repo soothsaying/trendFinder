@@ -16,9 +16,9 @@ export async function sendDraft(draft_post: string) {
       }
     );
 
-    return `Success sending draft to Slack at ${new Date().toISOString()}`;
+    return `Success sending draft to webhook at ${new Date().toISOString()}`;
   } catch (error) {
-    console.log('error sending draft to Slack');
+    console.log('error sending draft to webhook');
     console.log(error);
   }
 }
